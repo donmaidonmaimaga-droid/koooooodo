@@ -1,34 +1,10 @@
-OK 👍
-「JSONファイルも置かない」「外部APIも叩かない」
-＝コードだけで100% GitHub Pagesで動く完全体を出します。
-
-つまり：
-
-✅ 1ファイルだけ
-✅ CORSなし
-✅ APIなし
-✅ 100%表示
-✅ 赤丸表示
-✅ クリックで公式HP
-
-データはコード内に埋め込みます。
-
-✅ フォルダ構成（最小）
-/repository
-  ├── index.html
-  └── README.md
-
-
-script.js も不要です。
-
-🔥 完全体 index.html（これだけコピペ）
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>日本の美術館マップ</title>
+  <title>四国・瀬戸内 美術館マップ</title>
 
-  <!-- Leaflet -->
+  <!-- Leaflet CSS -->
   <link rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
@@ -50,63 +26,52 @@ script.js も不要です。
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-const map = L.map("map").setView([36.2048, 138.2529], 6);
+// 地図の初期位置（四国・瀬戸内中心）
+const map = L.map("map").setView([34.0, 133.3], 8);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap contributors"
 }).addTo(map);
 
-// 🔴 日本の代表的な美術館データ（埋め込み）
+// 四国・瀬戸内の美術館・アートスポットデータ
 const museums = [
-  {
-    name: "東京国立近代美術館",
-    lat: 35.6938,
-    lon: 139.7530,
-    website: "https://www.momat.go.jp/"
-  },
-  {
-    name: "国立新美術館",
-    lat: 35.6655,
-    lon: 139.7264,
-    website: "https://www.nact.jp/"
-  },
-  {
-    name: "京都国立近代美術館",
-    lat: 35.0159,
-    lon: 135.7833,
-    website: "https://www.momak.go.jp/"
-  },
-  {
-    name: "大塚国際美術館",
-    lat: 34.2436,
-    lon: 134.6626,
-    website: "https://o-museum.or.jp/"
-  },
-  {
-    name: "金沢21世紀美術館",
-    lat: 36.5608,
-    lon: 136.6562,
-    website: "https://www.kanazawa21.jp/"
-  }
+  // 徳島県
+  { name: "徳島県立近代美術館", lat: 34.0642, lon: 134.5544, website: "https://www.tokushima-kenbi.jp/" },
+  { name: "相生森林美術館", lat: 33.9688, lon: 134.0160, website: "" },
+  { name: "大塚国際美術館", lat: 34.1586, lon: 134.6023, website: "https://o-museum.or.jp/" },
+  // 香川県
+  { name: "香川県立東山魁夷せとうち美術館", lat: 34.2647, lon: 133.8017, website: "https://www.pref.kagawa.lg.jp/higashiyama/" },
+  { name: "高松市美術館", lat: 34.3410, lon: 134.0434, website: "https://www.city.takamatsu.kagawa.jp/museum/takamatsu" },
+  { name: "丸亀市猪熊弦一郎現代美術館 (MIMOCA)", lat: 34.3001, lon: 133.8095, website: "" },
+  { name: "直島コンテンポラリーアートミュージアム", lat: 34.4673, lon: 133.9957, website: "" },
+  { name: "中津万象園・丸亀美術館", lat: 34.2821, lon: 133.7955, website: "" },
+  // 愛媛県
+  { name: "愛媛県美術館", lat: 33.8417, lon: 132.7650, website: "https://www.ehime-art.jp/" },
+  { name: "玉川近代美術館", lat: 33.9812, lon: 132.9499, website: "" },
+  { name: "久万美術館", lat: 33.5583, lon: 133.0566, website: "" },
+  { name: "大三島美術館", lat: 34.0319, lon: 133.0714, website: "" },
+  { name: "今治市立河野美術館", lat: 34.0591, lon: 132.9952, website: "" },
+  { name: "セキ美術館", lat: 33.8440, lon: 132.7695, website: "" },
+  // 高知県
+  { name: "高知県立美術館", lat: 33.5657, lon: 133.5452, website: "" },
+  { name: "安芸市立書道美術館", lat: 33.7280, lon: 134.0170, website: "" },
+  { name: "中土佐町立美術館", lat: 33.3710, lon: 133.4478, website: "" }
 ];
 
 // マーカー表示
-museums.forEach(museum => {
-
-  const marker = L.circleMarker([museum.lat, museum.lon], {
-    radius: 8,
+museums.forEach(spot => {
+  const marker = L.circleMarker([spot.lat, spot.lon], {
+    radius: 7,
     color: "red",
     fillColor: "red",
     fillOpacity: 0.8
   }).addTo(map);
 
-  marker.bindPopup(`
-    <b>${museum.name}</b><br>
-    <a href="${museum.website}" target="_blank">
-      公式ホームページを見る
-    </a>
-  `);
-
+  let popup = `<b>${spot.name}</b><br/>`;
+  if (spot.website) {
+    popup += `<a href="${spot.website}" target="_blank">公式HPを見る</a>`;
+  }
+  marker.bindPopup(popup);
 });
 </script>
 
