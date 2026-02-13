@@ -1,0 +1,114 @@
+OK 👍
+「JSONファイルも置かない」「外部APIも叩かない」
+＝コードだけで100% GitHub Pagesで動く完全体を出します。
+
+つまり：
+
+✅ 1ファイルだけ
+✅ CORSなし
+✅ APIなし
+✅ 100%表示
+✅ 赤丸表示
+✅ クリックで公式HP
+
+データはコード内に埋め込みます。
+
+✅ フォルダ構成（最小）
+/repository
+  ├── index.html
+  └── README.md
+
+
+script.js も不要です。
+
+🔥 完全体 index.html（これだけコピペ）
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>日本の美術館マップ</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+const map = L.map("map").setView([36.2048, 138.2529], 6);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap contributors"
+}).addTo(map);
+
+// 🔴 日本の代表的な美術館データ（埋め込み）
+const museums = [
+  {
+    name: "東京国立近代美術館",
+    lat: 35.6938,
+    lon: 139.7530,
+    website: "https://www.momat.go.jp/"
+  },
+  {
+    name: "国立新美術館",
+    lat: 35.6655,
+    lon: 139.7264,
+    website: "https://www.nact.jp/"
+  },
+  {
+    name: "京都国立近代美術館",
+    lat: 35.0159,
+    lon: 135.7833,
+    website: "https://www.momak.go.jp/"
+  },
+  {
+    name: "大塚国際美術館",
+    lat: 34.2436,
+    lon: 134.6626,
+    website: "https://o-museum.or.jp/"
+  },
+  {
+    name: "金沢21世紀美術館",
+    lat: 36.5608,
+    lon: 136.6562,
+    website: "https://www.kanazawa21.jp/"
+  }
+];
+
+// マーカー表示
+museums.forEach(museum => {
+
+  const marker = L.circleMarker([museum.lat, museum.lon], {
+    radius: 8,
+    color: "red",
+    fillColor: "red",
+    fillOpacity: 0.8
+  }).addTo(map);
+
+  marker.bindPopup(`
+    <b>${museum.name}</b><br>
+    <a href="${museum.website}" target="_blank">
+      公式ホームページを見る
+    </a>
+  `);
+
+});
+</script>
+
+</body>
+</html>
